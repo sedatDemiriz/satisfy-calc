@@ -1,0 +1,9 @@
+dev_book.ipynb
+__pycache__/*
+.vscode/*
+build/*
+dist/*
+recipes.sc
+satisfy_calc.egg-info/*
+temp/*
+satisfy_calc/__pycache__/
