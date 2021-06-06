@@ -7,3 +7,4 @@ recipes.sc
 satisfy_calc.egg-info/*
 temp/*
 satisfy_calc/__pycache__/
+update_pypi.sh
