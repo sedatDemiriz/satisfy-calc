@@ -4,6 +4,8 @@
 
 `satisfy-calc` is a command line utility for calculating and visualizing crafting trees in [Satisfactory Game](https://www.satisfactorygame.com/) by [Coffee Stain Studios](https://www.coffeestainstudios.com/) written in Python. This utility is intended to aid users in the construction of complex production lines utilizing all available base and alternate recipes, or for users simply wanting to check their own designs for efficiency and correctness.
 
+`satisfy-calc` is available on PyPi and can be installed using `python -m pip install satisfy-calc`.
+
 ### Quick Use Guide:
 
 1. On first use, invoke `python -m satisfy-calc update` to get all up to date recipes. Repeat this step after game updates.
