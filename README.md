@@ -112,8 +112,8 @@ can be used to satisfy the rate requirement. Due to the sandbox nature of Satisf
 
 ### Future Plans:
 
-1. Reuse of recipes already selected by the user during the crafting tree. 
-   - This will likely be the default behavior of the utility. 
+1. ~~Reuse of recipes already selected by the user during the crafting tree.~~ 
+   - ~~This will likely be the default behavior of the utility.~~ 
    - A command line flag will be made available for users wishing to construct more complex factories, and will be asked to make a selection for every encountered recipe.
 2. Saving of generated crafting trees locally, and being able to fetch and see saved trees freely.
 3. Addition of item transport guidelines such as the Mk. of conveyors or pipes required for each connection.
@@ -125,7 +125,9 @@ can be used to satisfy the rate requirement. Due to the sandbox nature of Satisf
 7. And in typical software development fashion, more tests and overall polish.
 
 ### Update History:
-
+- Version 1.2.0 released:
+  - Implemented recipe reuse during crafting tree construction. It is now the default option.
 - Version 1.1.2 released:
   - Made available on PyPI.
-- Version 1.0.0 released.
+- Version 1.0.0 released:
+  - Initial commit including `update` and `calc` commands.

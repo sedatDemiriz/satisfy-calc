@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
         name="satisfy-calc",
-        version="1.1.3",
+        version="1.2.0",
         description="Command line crafting tree visualizer for Satisfactory Game by CoffeeStain Studios",
         long_description=README,
         long_description_content_type="text/markdown",
