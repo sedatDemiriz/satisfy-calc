@@ -12,7 +12,7 @@ class CraftingTree():
         """
         init_item = Item(product_name, 'solid', product_rate)
         self._coproduct_recipes_list = coproduct_recipes_list
-        self._root_node = CraftingNode(init_item, self._coproduct_recipes_list, 0)
+        self._root_node = CraftingNode(init_item, self._coproduct_recipes_list, 0, [])
         # self._tree_height = 0
         # self._all_reqs = []
 
@@ -53,11 +53,12 @@ class CraftingNode():
 
     MAX_CHILDREN = 4
 
-    def __init__(self, init_item: Item, coproduct_recipes_list: list, level: int):
+    def __init__(self, init_item: Item, coproduct_recipes_list: list, level: int, cached_recipes: list):
         """
         Initialize node using Item class definition.
         """
         self.coproduct_recipes_list = coproduct_recipes_list
+        self.cached_recipes = cached_recipes
         self.num_buildings = 0.0
         self.goal = init_item
         self.byproducts = []
@@ -174,31 +175,50 @@ class CraftingNode():
         else:
             raise Exception('Max number of allowed children ({}) exceeded.'.format(self.MAX_CHILDREN))
     
-    def get_suitable_recipes(self, desired_output):
+    def get_suitable_CR(self, desired_output):
         """
-        Return the CRs instance containing Recipes for the desired output.
+        Return the CR instance containing Recipes for the desired output.
         """
         for coproduct_recipe in self.coproduct_recipes_list:
             if desired_output == coproduct_recipe.product:
                 return coproduct_recipe
         
         return None
-        
+
+    def recipe_is_cached(self, recipe):
+        """
+        Return True if recipe been used before in the Crafting Tree, False otherwise.
+        """
+        if recipe in self.cached_recipes:
+            return True
+
+        return False
+
     def calc(self):
         """
         Take root node of tree, with user assistance, compute the crafting requirements and build the tree.
         """
         # Find appropriate recipes
-        suitable_recipe = self.get_suitable_recipes(self.goal.name)
+        suitable_CR = self.get_suitable_CR(self.goal.name)
 
         # If recipe for desired goal exists
-        if suitable_recipe:
+        if suitable_CR:
 
             # If a non-raw recipe has been returned, calculate production requirements
-            if suitable_recipe.recipes:
+            if suitable_CR.recipes:
+                
+                # If recipe has been cached 
+                for recipe in suitable_CR.recipes:
 
-                # Ask user for which recipe to use
-                self.recipe = self.user_recipe_select(suitable_recipe)
+                    if self.recipe_is_cached(recipe):
+                        self.recipe = recipe
+                
+                # If recipe was not cached
+                if not self.recipe:
+                    self.recipe = self.user_recipe_select(suitable_CR)
+                    self.cached_recipes.append(self.recipe)                    
+
+                # Get inputs/outputs for selected recipe
                 all_inputs = self.recipe.input_items
                 all_output_names = self.recipe.output_names
 
@@ -215,7 +235,7 @@ class CraftingNode():
                     next_goal = Item(inp.name, inp.form, self.goal.rate * multiplier)
 
                     # Add next steps as child CraftingNode
-                    self.add_child(CraftingNode(next_goal, self.coproduct_recipes_list, self.level+1))
+                    self.add_child(CraftingNode(next_goal, self.coproduct_recipes_list, self.level+1, self.cached_recipes))
 
                 # Find and report byproducts for the step if present
                 if len(all_output_names) > 1:
@@ -244,7 +264,7 @@ class CraftingNode():
 
     def traverse(self):
         """
-        Print CraftingNodes as tree is being traversed depth-first.
+        Print Crafting Nodes as tree is being traversed depth-first.
         """
         self.display()
 
