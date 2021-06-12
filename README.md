@@ -2,15 +2,15 @@
 
 ### Introduction:
 
-`satisfy-calc` is a command line utility for calculating and visualizing crafting trees in [Satisfactory Game](https://www.satisfactorygame.com/) by [Coffee Stain Studios](https://www.coffeestainstudios.com/) written in Python. This utility is intended to aid users in the construction of complex production lines utilizing all available base and alternate recipes, or for users simply wanting to check their own designs for efficiency and correctness.
+`satisfy-calc` is a command line utility for calculating and visualizing crafting trees in [Satisfactory Game](https://www.satisfactorygame.com/) by [Coffee Stain Studios](https://www.coffeestainstudios.com/) written in Python. This utility is intended to aid users in the planning of complex production lines utilizing all available recipes, or for users that simply want to check their own designs for efficiency and correctness.
 
 `satisfy-calc` is available on PyPI and can be installed using `python -m pip install satisfy-calc`.
 
 ### Quick Use Guide:
 
-1. On first use, invoke `python -m satisfy-calc update` to get all up to date recipes. Repeat this step after game updates.
-   **Note:** This might take around a minute, and requires an active internet connection.
-2. After the recipes are fetched, invoke `python -m satisfy-calc calc <Item Name> <Item Rate>` to get the crafting tree.
+1. On first use, invoke `python -m satisfy_calc update` to get all up to date recipes. Repeat this step after game updates.
+   **Note:** This step might take around a minute, and requires an active internet connection.
+2. After recipes have been fetched, invoke `python -m satisfy_calc calc <Item Name> <Item Rate>` and make selections as instructed.
    **Note:** Use single or double quotes around item names that have multiple words in them e.g. `'Iron Plate' 20` instead of just `Iron Plate 20`.
 
 ### Detailed Use Guide:
@@ -19,32 +19,32 @@
 
 **1. Updating locally stored recipes:**
 
-Invoked through `python -m satisfy-calc update` or `python -m satisfy-calc -u`, this mode will acquire all recipes currently in use within the game if none exist locally, or update the locally stored recipes if already present.
+Invoked through `python -m satisfy_calc update` or `python -m satisfy_calc -u`, this mode will acquire all recipes currently available the game if they do not exist locally, or update the locally stored recipes if they exist.
 
-Recipes are fetched from the [Satisfactory Wiki](https://satisfactory.fandom.com/wiki/Satisfactory_Wiki), and therefore are subject to changes during/after updates that affect recipe contents and/or add new recipes. The fetched recipes are stored locally under the package install directory as a text file.
+Recipes are fetched from the [Satisfactory Wiki](https://satisfactory.fandom.com/wiki/Satisfactory_Wiki), and therefore are subject to change during/after updates that affect recipe contents and/or add new recipes. The fetched recipes are stored locally under the package install directory as `recipes.sc`.
 
-The use of this mode is recommended after any update that has new recipes and during the first use of the utility in order to generate the initial file locally.
+The use of this mode is recommended during first use of the utility in order to generate the initial file locally, and after any update that adds new recipes.
 
-`satisfy-calc` is not intended to allow for simple recipe browsing, as the recipe tables found on the Wiki provide a more intuitive visual representation for recipes.
+`satisfy-calc` is not intended to allow for simple recipe browsing, as the recipe tables found on the Wiki provide a more intuitive visual representation for recipes. While the `satisfy-calc` `recipes.sc` is a plaintext file, it is not meant for human viewing.
 
-**2. Calculating crafting tree for a given input item and desired rate of production:**
+**2. Building a crafting tree for a given input item at a desired rate:**
 
-Invoked through `python -m satisfy-calc calc <Item Name> <Item Rate>` or `python -m satisfy-calc -c <Item Name> <Item Rate>`, this mode will calculate the individual requirements to craft the given item at the given rate. Rate units for any item is assumed to be items/min for solids and m3/min for liquids and gases.
+Invoked through `python -m satisfy_calc calc <Item Name> <Item Rate>` or `python -m satisfy_calc -c <Item Name> <Item Rate>`, this mode will calculate the individual requirements to craft the given item at the given rate. Rate units for items is assumed to be items/min for solids and m3/min for fluids and gases.
 
-Upon invocation the utility will start formulating a tree structure, rooted on the specified item and given rate. The tree will add new branches for each ingredient required to craft the specified item. This process will repeat until each branch concludes in a form of raw input that can be extracted from the world, such as Ore or Crude Oil. At each such step, the user will be asked to provide their recipe of choice from a suitable list of recipes that can be utilized in the production of the necessary item.
+Upon invocation the utility will start building a tree structure, starting from the specified item and given rate. The tree will grow new branches for each ingredient required to craft the specified item. At each such step, the user will be asked to provide their recipe of choice from a suitable list of recipes that can be utilized in the production of the necessary item. In this list, the first choice will always be the base recipe for a part, and following recipes are alternate, unlockable recipes. This process will repeat for each crafing step until each branch concludes in some form of raw input that can be extracted from the world, such as Ore or Crude Oil.
 
-Each step can be broken down into several parts:
-- Item name that needs to be produced at given rate through the user-selected recipe.
-- All byproducts of the user-selected recipe as well as the rate at which they will be produced, if applicable.
-- Name and number of buildings to carry out the crafting of the user-selected recipe. 
-  **Note:** If the item is Ore or other raw input, the necessary rate of extraction from the world will be listed instead.
+The display of each crafting step can be broken down into several parts:
+- Item name produced at given rate.
+- All byproducts of the crafting step at rates which they will be produced at, if applicable.
+- Name and number of buildings to carry out the crafting step.
+  **Note:** If the item is any type of raw input, the necessary rate of extraction from the world will be listed instead.
 
 ### Usage Example:
 
 Upon the invocation of the following line:
-`python -m satisfy-calc calc 'Iron Plate' 30`
+`python -m satisfy_calc calc 'Iron Plate' 30`
 
-The following output will follow, and the user will be prompted to make a recipe selection:
+The following the user will be prompted to make a recipe selection:
 ```
 Begin crafting tree calculation... 
 Please select what recipe to use at each step: 
@@ -55,7 +55,7 @@ Please select what recipe to use at each step:
 Enter recipe # to use: _
 ```
 
-Because the crafting process does not end after a single step, the user will be prompted again:
+This specific crafting tree does not conclude after a single step, therefore the user will be prompted to make a selection again:
 ```
 Begin crafting tree calculation... 
 Please select what recipe to use at each step: 
@@ -71,7 +71,7 @@ Enter recipe # to use: 1
 Enter recipe # to use: _
 ```
 
-In both cases the first recipe from the list was selected, and the crafting tree is constructed automatically after all necessary recipes have been selected:
+In both cases the base recipe from the list was selected, and the crafting tree is constructed automatically after all selections have been made:
 ```
 Begin crafting tree calculation... 
 Please select what recipe to use at each step: 
@@ -95,20 +95,20 @@ Enter recipe # to use: 1
                 L_ 45.0/min Iron Ore.
                    Mine/Extract resource from the world.
 ```
-The produced crafting tree that can be read as follows:
+This specific crafting tree can be read as follows:
 
 1. Extract 45 Iron Ore/min from the world.
 2. Use 1.5 Smelters to smelt the 45 Iron Ore/min into 45 Iron Ingot/min.
 3. Use 1.5 Constructors to craft 45 Iron Ingot/min into 30 Iron Plate/min.
 
-**Note:** The 1.5 [Building] notation is used to denote the use of 1.5 times the full production capacity of a single building instance. For example:
+**Note:** The 1.5x [Building] notation is used to denote the use of 1.5 times the full production capacity of a single building instance. For example:
 
-- One Smelter overclocked to 150%
-- One Smelter at 100%, one Smelter downclocked to 50%
-- Two Smelters downclocked to 75%
+- One [Building] overclocked to 150%
+- One [Building] at 100%, one [Building] downclocked to 50%
+- Two [Building] downclocked to 75%
 - Any other mathematically equivalent solution
 
-can be used to satisfy the rate requirement.
+can be used to satisfy the rate requirement. Due to the sandbox nature of Satisfactory, the user is free to implement any solution appropriate for their situation.
 
 ### Future Plans:
 
